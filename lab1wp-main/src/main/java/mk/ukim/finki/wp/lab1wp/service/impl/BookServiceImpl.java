@@ -1,11 +1,13 @@
 package mk.ukim.finki.wp.lab1wp.service.impl;
 
+import mk.ukim.finki.wp.lab1wp.model.Author;
 import mk.ukim.finki.wp.lab1wp.model.Book;
 import mk.ukim.finki.wp.lab1wp.repository.BookRepository;
 import mk.ukim.finki.wp.lab1wp.service.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -25,4 +27,25 @@ public class BookServiceImpl implements BookService {
     public List<Book> searchBooks(String text, Double rating) {
         return bookRepository.searchBooks(text, rating);
     }
+
+    @Override
+    public Book save(String title, String genre, double rating, Author author) {
+        return bookRepository.save(title, genre, rating, author);
+    }
+
+    @Override
+    public Book update(Long id, String title, String genre, double rating, Author author) {
+        return bookRepository.update(id, title, genre, rating, author);
+    }
+
+    @Override
+    public void delete(Long id) {
+        bookRepository.delete(id);
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        return bookRepository.findById(id);
+    }
+
 }

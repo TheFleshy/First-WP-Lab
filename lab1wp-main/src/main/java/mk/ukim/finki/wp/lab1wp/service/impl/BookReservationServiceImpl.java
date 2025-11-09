@@ -16,7 +16,7 @@ public class BookReservationServiceImpl implements BookReservationService {
 
     @Override
     public BookReservation placeReservation(String bookTitle, String readerName, String readerAddress, int numberOfCopies) {
-        BookReservation reservation = new BookReservation(bookTitle, readerName, readerAddress, (long) numberOfCopies);
+        BookReservation reservation = new BookReservation(bookTitle, readerName, readerAddress, numberOfCopies);
         return reservationRepository.save(reservation);
     }
 }
