@@ -30,17 +30,28 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(String title, String genre, double rating, Author author) {
-        return bookRepository.save(title, genre, rating, author);
+        Book book = new Book(title, genre, rating, author);
+        return bookRepository.save(book);
     }
 
     @Override
     public Book update(Long id, String title, String genre, double rating, Author author) {
-        return bookRepository.update(id, title, genre, rating, author);
+        Optional<Book> existingBook = bookRepository.findById(id);
+
+        if (existingBook.isPresent()) {
+            Book book = existingBook.get();
+            book.setTitle(title);
+            book.setGenre(genre);
+            book.setAverageRating(rating);
+            book.setAuthor(author);
+            return bookRepository.save(book);
+        }
+        return null;
     }
 
     @Override
     public void delete(Long id) {
-        bookRepository.delete(id);
+        bookRepository.deleteById(id);
     }
 
     @Override

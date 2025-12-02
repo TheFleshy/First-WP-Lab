@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: lab1wp_postgres
+    environment:
+      POSTGRES_DB: books
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+
+
+# START
+# docker-compose up -d
+#
+# STOP
+# docker-compose down
+#
+# baza show:
+# docker exec -it lab1wp_postgres psql -U postgres -d books
