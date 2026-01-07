@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Startup List</title>
+</head>
+<body>
+
+<div>
+    <!-- The form below should invoke the method StartupController.listAll -->
+    <form id="filter-form" th:action="@{/startups}" th:method="GET">
+        <label for="name">Startup Name</label>
+        <input id="name" type="text" th:value="${name}" name="name"/>
+
+        <label for="valuation">Valuation (in millions)</label>
+        <input id="valuation" type="number" th:value="${valuation}" name="valuation"/>
+
+        <label for="yearFounded">Year Founded</label>
+        <input id="yearFounded" type="number" min="2000" th:value="${yearFounded}" name="yearFounded"/>
+
+        <label for="industry">Industry</label>
+        <select id="industry" name="industry">
+            <option value="">All</option>
+            <option th:each="i : ${industries}"
+                    th:value="${i}"
+                    th:text="${i}"
+                    th:selected="${industry != null && industry == i}">
+            </option>
+        </select>
+
+        <label for="founderId">Founder</label>
+        <select id="founderId" name="founderId">
+            <option value="">All</option>
+            <option th:each="f : ${founders}"
+                    th:value="${f.getId()}"
+                    th:text="${f.getName()}"
+                    th:selected="${founderId != null && founderId == f.getId()}">
+            </option>
+        </select>
+
+        <button id="filter" type="submit">Filter</button>
+    </form>
+
+    <div>
+        <!-- StartupController.showAdd -->
+        <a class="add-item" href="/startups/add" sec:authorize="hasRole('ADMIN')" >Add new
+            startup</a>
+    </div>
+
+    <table>
+        <tr>
+            <th>Startup Name</th>
+            <th>Valuation</th>
+            <th>Year Founded</th>
+            <th>Industry</th>
+            <th>Founder</th>
+            <th>Active/Deactivated</th>
+            <th>Actions</th>
+        </tr>
+        <!-- For each startup you should have one <tr> like below -->
+        <tr class="item" th:each="st : ${startup.content}">
+            <td th:text="${st.name}"></td>
+            <td th:text="${st.valuation}"></td>
+            <td th:text="${st.yearFounded}"></td>
+            <td th:text="${st.industry}"></td>
+            <td th:text="${st.founder?.name}"></td>
+            <td th:text="${st.active ? 'ACTIVE' : 'DEACTIVATED'}"></td>
+            <td>
+                <a class="edit-item" th:href="@{'/startups/edit/{id}' (id=${st.id})}" sec:authorize="hasRole('ADMIN')">Edit</a>
+
+                <form th:action="@{'/startups/delete/{id}' (id=${st.id})}" th:method="POST"  sec:authorize="hasRole('ADMIN')">
+                    <button type="submit" class="delete-item">Delete</button>
+                </form>
+
+                <form th:action="@{'/startups/deactivate/{id}' (id=${st.id})}" th:method="POST" sec:authorize="hasRole('ADMIN')"
+                th:if="${st.active}">
+                    <button type="submit" class="close-item">Deactivate</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <ul id="nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>
+
+</body>
+</html>
